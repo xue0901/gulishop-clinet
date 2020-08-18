@@ -9,9 +9,9 @@
           <p>
             <span>请</span>
             <router-link to="/login">登录</router-link>
-            <!-- <a href="###">登录</a> -->
+            <!-- <a href="###"></a> -->
             <router-link to="/register" class="register">免费注册</router-link>
-            <!-- <a href="###" class="register">免费注册</a> -->
+            <!-- <a href="###" ></a> -->
           </p>
         </div>
         <div class="typeList">
@@ -29,10 +29,12 @@
     <!--头部第二行 搜索区域-->
     <div class="bottom">
       <h1 class="logoArea">
-        <router-link to="/home" class="logo" title="尚品汇"><img src="./images/logo.png" alt /></router-link>
-        <!-- <a class="logo" title="尚品汇" href="###" target="_blank">
-          <img src="./images/logo.png" alt /> -->
-        </a>
+        <router-link to="/home" class="logo" title="尚品汇">
+          <img src="./images/logo.png" alt />
+        </router-link>
+        <!-- <a   href="###" target="_blank">
+          
+        </a> -->
       </h1>
       <div class="searchArea">
         <form action="###" class="searchForm">
@@ -46,38 +48,64 @@
 
 <script>
 export default {
-  name: 'Header',
-  data() {
+  name: "Header",
+  data(){
     return {
       keyword:''
     }
   },
-  methods: {
+  mounted(){
+    this.$bus.$on('clearKeyword',this.clearKeyword)
+  },
+  methods:{
+    clearKeyword(){
+      this.keyword = ''
+    },
+    
     toSearch(){
       let location = {
-        //1.对象写法
-        //传递的参数有params参数，对象的写法必须是name和params组合
-        //有query参数无所谓
-        //2.制定params参数可穿可不穿
-        //在路由路径中获取Params参数时加 ?
-        //3.传递的params是空串，路径也会出现问题
-        //解决：不传参数 或者传undefinde 代表什么也没传
-        //前提是params参数可传可不穿
+        //1、对象写法
+        //当传递参数传递有params参数的时候，对象写法必须是name和params去组合
+        //当传递参数有query的时候无所谓
+
+        //2、怎么制定params参数可传可不传
+        // 在路由路径当中获取params参数的时候加?
+
+        //3、传递的params参数如果是空串，路径也会出问题
+        // 要么不指定params参数   要么传递过去一个undefined 代表什么都没传，不能直接传空串
+        // 前提得  params参数可传可不传
+
+        // path:'/search',
         name:'search',
         params:{
           keyword:this.keyword || undefined
         },
-        query:{
-          keyword:this.keyword.toUpperCase()
-        }
+        // query:{
+        //   keyword:this.keyword.toUpperCase()
+        // }
       }
-      this.$router.push(location).catch(() =>{}) //对象
+
+
+      //点击搜索的时候应该去看看以前有没有query参数 （路由当中有没有）
+      if(this.$route.query){
+        location.query = this.$route.query
+      }
+
+      if(this.$route.path !== '/home'){
+        this.$router.replace(location) //对象
+      }else{
+        this.$router.push(location) //对象
+      }
+      
+      // this.$router.push('/search') //字符串 
+      // this.$router.push(location) //对象
+      //路由传递参数
     }
-  },
-}
+  }
+};
 </script>
 
-<style lang='less' scoped>
+<style lang="less" scoped>
 .header {
   & > .top {
     background-color: #eaeaea;

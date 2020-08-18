@@ -1,4 +1,5 @@
 <template>
+  <!-- 底部 -->
   <div class="footer">
     <div class="footer-container">
       <div class="footerList">
@@ -106,11 +107,11 @@
 
 <script>
 export default {
-  name: 'Footer',
-}
+  name: "Footer",
+};
 </script>
 
-<style lang='less' scoped>
+<style lang="less" scoped>
 .footer {
   background-color: #eaeaea;
 

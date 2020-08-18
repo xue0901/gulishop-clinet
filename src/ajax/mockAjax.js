@@ -19,7 +19,7 @@ import 'nprogress/nprogress.css'
 //创建一个新的axios实例
 //1
 const instance = axios.create({
-  baseURL: '/api',    //配置请求基础路径
+  baseURL: '/mock',    //配置请求基础路径
   timeout: 20000, //配置请求超时时间
 });
 

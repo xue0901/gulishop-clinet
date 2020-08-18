@@ -4,20 +4,22 @@
     <div class="sortList clearfix">
       <div class="center">
         <!--banner轮播-->
-        <div class="swiper-container" id="mySwiper">
+        <!-- <div class="swiper-container" ref="banner">
           <div class="swiper-wrapper">
-            <div class="swiper-slide">
-              <img src="./images/banner1.jpg" />
+            <div class="swiper-slide" v-for="(banner, index) in bannerList" :key="banner.id">
+              <img :src="banner.imgUrl" />
             </div>
-          </div>
+          </div> -->
           <!-- 如果需要分页器 -->
-          <div class="swiper-pagination"></div>
+          <!-- <div class="swiper-pagination"></div> -->
 
           <!-- 如果需要导航按钮 -->
-          <div class="swiper-button-prev"></div>
+          <!-- <div class="swiper-button-prev"></div>
           <div class="swiper-button-next"></div>
-        </div>
+        </div> -->
+        <SliderLoop :bannerList="bannerList"></SliderLoop>
       </div>
+
       <div class="right">
         <div class="news">
           <h4>
@@ -26,59 +28,69 @@
           </h4>
           <div class="clearix"></div>
           <ul class="news-list unstyled">
-            <li><span class="bold">[特惠]</span>备战开学季 全民半价购数码</li>
-            <li><span class="bold">[公告]</span>备战开学季 全民半价购数码</li>
-            <li><span class="bold">[特惠]</span>备战开学季 全民半价购数码</li>
-            <li><span class="bold">[公告]</span>备战开学季 全民半价购数码</li>
-            <li><span class="bold">[特惠]</span>备战开学季 全民半价购数码</li>
+            <li>
+              <span class="bold">[特惠]</span>备战开学季 全民半价购数码
+            </li>
+            <li>
+              <span class="bold">[公告]</span>备战开学季 全民半价购数码
+            </li>
+            <li>
+              <span class="bold">[特惠]</span>备战开学季 全民半价购数码
+            </li>
+            <li>
+              <span class="bold">[公告]</span>备战开学季 全民半价购数码
+            </li>
+            <li>
+              <span class="bold">[特惠]</span>备战开学季 全民半价购数码
+            </li>
           </ul>
         </div>
         <ul class="lifeservices">
-          <li class=" life-item ">
+          <li class="life-item">
             <i class="list-item"></i>
             <span class="service-intro">话费</span>
           </li>
-          <li class=" life-item ">
+          <li class="life-item">
             <i class="list-item"></i>
             <span class="service-intro">机票</span>
           </li>
-          <li class=" life-item ">
+          <li class="life-item">
             <i class="list-item"></i>
             <span class="service-intro">电影票</span>
           </li>
-          <li class=" life-item ">
+          <li class="life-item">
             <i class="list-item"></i>
             <span class="service-intro">游戏</span>
           </li>
-          <li class=" life-item">
+          <li class="life-item">
             <i class="list-item"></i>
             <span class="service-intro">彩票</span>
           </li>
-          <li class=" life-item">
+          <li class="life-item">
             <i class="list-item"></i>
             <span class="service-intro">加油站</span>
           </li>
-          <li class=" life-item">
+          <li class="life-item">
             <i class="list-item"></i>
             <span class="service-intro">酒店</span>
           </li>
-          <li class=" life-item">
+          <li class="life-item">
             <i class="list-item"></i>
             <span class="service-intro">火车票</span>
           </li>
-          <li class=" life-item ">
+          <li class="life-item">
             <i class="list-item"></i>
             <span class="service-intro">众筹</span>
           </li>
-          <li class=" life-item">
+          <li class="life-item">
             <i class="list-item"></i>
             <span class="service-intro">理财</span>
           </li>
-          <li class=" life-item">
+          <li class="life-item">
             <i class="list-item"></i>
             <span class="service-intro">礼品卡</span>
           </li>
-          <li class=" life-item">
+          <li class="life-item">
             <i class="list-item"></i>
             <span class="service-intro">白条</span>
           </li>
@@ -92,9 +104,66 @@
 </template>
 
 <script>
+// import Swiper from "swiper";
+// import "swiper/css/swiper.css";
+
+import { mapState } from "vuex";
+
 export default {
-  name: 'ListContainer',
-}
+  name: "ListContainer",
+  mounted() {
+    //1、在这里实例化swiper是不行的
+    // 原因: 轮播图的结构还没有形成
+    //mounted内部才去请求数据，mounted内部已经实例化swiper
+  
+    // new Swiper(this.$refs.banner, {
+    //   // 如果需要分页器
+    //   pagination: {
+    //     el: ".swiper-pagination",
+    //   },
+    //   // 如果需要前进后退按钮
+    //   navigation: {
+    //     nextEl: ".swiper-button-next",
+    //     prevEl: ".swiper-button-prev",
+    //   },
+    // });
+    this.$store.dispatch("getBannerList");
+  },
+  computed: {
+    ...mapState({
+      bannerList: (state) => state.home.bannerList,
+    }),
+  },
+  // watch: {
+  //   // bannerList(newVal,oldVal){
+
+  //   // }
+
+  //   bannerList: {
+  //     immediate:true, //immediate立即的意思
+  //     //监视数据如果有了数据就去实例化swiper  但是
+  //     //监视有数据实例化的时候太快了,上面的结构也不一定形成（for）
+  //     // watch + nextTick
+  //     // nextTick 等待页面最近一次的更新完成，会调用它内部的回调函数
+  //     // Vue.nextTick    vm（Vue的实例或者组件对象，就是this）.$nextTick  两个方法你开心就好，效果一样的
+  //     handler(newVal, oldVal) {
+  //       this.$nextTick(() => {
+  //         new Swiper(this.$refs.banner, {
+  //           // 如果需要分页器
+  //           pagination: {
+  //             el: ".swiper-pagination",
+  //           },
+  //           // 如果需要前进后退按钮
+  //           navigation: {
+  //             nextEl: ".swiper-button-next",
+  //             prevEl: ".swiper-button-prev",
+  //           },
+  //         });
+  //       });
+  //     },
+  //   },
+  // },
+};
 </script>
 
 <style lang="less" scoped>
