@@ -6,17 +6,32 @@
       <div class="container">
         <div class="loginList">
           <p>尚品汇欢迎您！</p>
-          <p>
+
+          <p v-if="$store.state.user.userInfo.name">
+            <!-- <router-link to="/login">登录</router-link> -->
+            <a href="javascript:;">{{$store.state.user.userInfo.name}}</a>
+            <!-- <router-link to="/register" class="register">免费注册</router-link> -->
+            <a
+              href="javascript:;"
+              class="register"
+              @click="logout"
+            >退出登录</a>
+          </p>
+          <p v-else>
             <span>请</span>
             <router-link to="/login">登录</router-link>
             <!-- <a href="###"></a> -->
-            <router-link to="/register" class="register">免费注册</router-link>
+            <router-link
+              to="/register"
+              class="register"
+            >免费注册</router-link>
             <!-- <a href="###" ></a> -->
           </p>
         </div>
         <div class="typeList">
           <a href="###">我的订单</a>
-          <a href="###">我的购物车</a>
+          <!-- <a href="###">我的购物车</a> -->
+          <router-link to="/shopcart">我的购物车</router-link>
           <a href="###">我的尚品汇</a>
           <a href="###">尚品汇会员</a>
           <a href="###">企业采购</a>
@@ -29,17 +44,36 @@
     <!--头部第二行 搜索区域-->
     <div class="bottom">
       <h1 class="logoArea">
-        <router-link to="/home" class="logo" title="尚品汇">
-          <img src="./images/logo.png" alt />
+        <router-link
+          to="/home"
+          class="logo"
+          title="尚品汇"
+        >
+          <img
+            src="./images/logo.png"
+            alt
+          />
         </router-link>
         <!-- <a   href="###" target="_blank">
           
         </a> -->
       </h1>
       <div class="searchArea">
-        <form action="###" class="searchForm">
-          <input type="text" id="autocomplete" class="input-error input-xxlarge" v-model="keyword"/>
-          <button class="sui-btn btn-xlarge btn-danger" type="button" @click="toSearch">搜索</button>
+        <form
+          action="###"
+          class="searchForm"
+        >
+          <input
+            type="text"
+            id="autocomplete"
+            class="input-error input-xxlarge"
+            v-model="keyword"
+          />
+          <button
+            class="sui-btn btn-xlarge btn-danger"
+            type="button"
+            @click="toSearch"
+          >搜索</button>
         </form>
       </div>
     </div>
@@ -48,21 +82,21 @@
 
 <script>
 export default {
-  name: "Header",
-  data(){
+  name: 'Header',
+  data() {
     return {
-      keyword:''
+      keyword: '',
     }
   },
-  mounted(){
-    this.$bus.$on('clearKeyword',this.clearKeyword)
+  mounted() {
+    this.$bus.$on('clearKeyword', this.clearKeyword)
   },
-  methods:{
-    clearKeyword(){
+  methods: {
+    clearKeyword() {
       this.keyword = ''
     },
-    
-    toSearch(){
+
+    toSearch() {
       let location = {
         //1、对象写法
         //当传递参数传递有params参数的时候，对象写法必须是name和params去组合
@@ -76,33 +110,42 @@ export default {
         // 前提得  params参数可传可不传
 
         // path:'/search',
-        name:'search',
-        params:{
-          keyword:this.keyword || undefined
+        name: 'search',
+        params: {
+          keyword: this.keyword || undefined,
         },
         // query:{
         //   keyword:this.keyword.toUpperCase()
         // }
       }
 
-
       //点击搜索的时候应该去看看以前有没有query参数 （路由当中有没有）
-      if(this.$route.query){
+      if (this.$route.query) {
         location.query = this.$route.query
       }
 
-      if(this.$route.path !== '/home'){
+      if (this.$route.path !== '/home') {
         this.$router.replace(location) //对象
-      }else{
+      } else {
         this.$router.push(location) //对象
       }
-      
-      // this.$router.push('/search') //字符串 
+
+      // this.$router.push('/search') //字符串
       // this.$router.push(location) //对象
       //路由传递参数
-    }
-  }
-};
+    },
+
+    async logout() {
+      try {
+        await this.$store.dispatch('logout')
+        alert('退出登录成功,自动跳转到首页')
+        this.$router.push('/')
+      } catch (error) {
+        alert(error.message)
+      }
+    },
+  },
+}
 </script>
 
 <style lang="less" scoped>
